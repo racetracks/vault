@@ -1,0 +1,18 @@
+[Unit]
+Description="HashiCorp Consul - A service mesh solution"
+Documentation=https://www.consul.io/
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+User=consul
+Group=consul
+ExecStart=/bin/consul agent -server -bootstrap-expect=1 -data-dir=/var/lib/consul \
+  -config-dir=/etc/consul.d -bind=<CHANGE_THIS_TO_HOST_IP> -client=0.0.0.0
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGTERM
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
